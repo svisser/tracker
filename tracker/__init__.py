@@ -86,7 +86,20 @@ def add(slug):
         }
 
 
-@tracker.command()
+@tracker.command(help="Rename the object identifier for an object")
+@click.argument('old_slug')
+@click.argument('new_slug')
+def move(old_slug, new_slug):
+    with get_database() as data:
+        if old_slug not in data['objects']:
+            raise click.ClickExceptioN(
+                "Object {} not found in database".format(slug))
+        obj = data['objects'][old_slug]
+        data['objects'][new_slug] = obj
+        del data['objects'][old_slug]
+
+
+@tracker.command(help="Store a fact for an object")
 @click.argument('slug')
 @click.argument('fact')
 @click.argument('value')
