@@ -22,4 +22,10 @@ setup(
         'click==3.3',
     ],
     packages=['tracker'],
+    classifiers=[
+        'License :: OSI Approved :: MIT License',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 3',
+    ],
 )
