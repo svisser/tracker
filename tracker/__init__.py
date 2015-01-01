@@ -49,6 +49,7 @@ def main():
 @tracker.command()
 @click.argument('slug')
 def show(slug):
+    skipped_facts = set(('name',))
     with get_database() as data:
         objects = data['objects']
         if slug not in objects:
@@ -65,6 +66,8 @@ def show(slug):
         if objects[slug]['facts']:
             click.echo("Facts:")
             for key, value in sorted(objects[slug]['facts'].items()):
+                if key in skipped_facts:
+                    continue
                 click.echo('- ' + key + ': ' + value)
 
 
