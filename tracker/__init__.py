@@ -42,7 +42,13 @@ def main():
 @tracker.command()
 @click.argument('slug')
 def show(slug):
-    click.echo("Hello: {}".format(slug))
+    with shelve.open(get_database()) as d:
+        objects = d['objects']
+        if slug not in objects:
+            click.echo("Object {} could not be found".format(slug))
+            return
+        click.echo("Object {}".format(slug))
+        click.echo(objects[slug])
 
 
 if __name__ == '__main__':
