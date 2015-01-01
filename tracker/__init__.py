@@ -58,10 +58,10 @@ def show(slug):
         display_name = slug
         if objects[slug]['facts'].get('name'):
             display_name = objects[slug]['facts']['name']
-        click.echo("{} - Created: {} - Updated: {}".format(
+        click.echo("{} - Updated: {} - Created: {}".format(
             display_name,
-            objects[slug]['timestamp_created'].strftime("%B %d, %Y"),
             objects[slug]['timestamp_updated'].strftime("%B %d, %Y"),
+            objects[slug]['timestamp_created'].strftime("%B %d, %Y"),
         ))
         if objects[slug]['facts']:
             click.echo("Facts:")
