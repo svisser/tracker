@@ -72,5 +72,17 @@ def add(slug):
         }
 
 
+@tracker.command()
+@click.argument('slug')
+@click.argument('fact')
+@click.argument('value')
+def fact(slug, fact, value):
+    with get_database() as data:
+        if slug not in data['objects']:
+            raise click.ClickException(
+                "Object {} not found in database".format(slug))
+        data['objects'][slug]['facts'][fact] = value
+
+
 if __name__ == '__main__':
     tracker()
