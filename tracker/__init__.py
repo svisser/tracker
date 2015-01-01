@@ -13,7 +13,14 @@ import shelve
 import click
 
 
-@click.command()
+@click.group(invoke_without_command=True)
+@click.pass_context
+def tracker(ctx):
+    if ctx.invoked_subcommand is None:
+        main()
+
+
+@tracker.command()
 def main():
     try:
         os.makedirs(os.path.expanduser("~/.tracker/"))
@@ -24,5 +31,11 @@ def main():
             click.echo(item)
 
 
+@tracker.command()
+@click.argument('slug')
+def show(slug):
+    click.echo("Hello: {}".format(slug))
+
+
 if __name__ == '__main__':
-    main()
+    tracker()
