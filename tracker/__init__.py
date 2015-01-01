@@ -8,6 +8,7 @@ __license__ = 'MIT'
 __copyright__ = 'Copyright 2015 Simeon Visser'
 
 import contextlib
+import datetime
 import os
 import shelve
 
@@ -53,7 +54,11 @@ def show(slug):
         if slug not in objects:
             click.echo("Object {} could not be found".format(slug))
             return
-        click.echo("Object {}".format(slug))
+        click.echo("Object {} - Created: {} - Updated: {}".format(
+            slug,
+            objects[slug]['timestamp_created'].strftime("%B %d, %Y"),
+            objects[slug]['timestamp_updated'].strftime("%B %d, %Y"),
+        ))
         if objects[slug]['facts']:
             click.echo("Facts:")
             for key, value in sorted(objects[slug]['facts'].items()):
@@ -68,6 +73,8 @@ def add(slug):
             raise click.ClickException(
                 "Object {} already in database".format(slug))
         data['objects'][slug] = {
+            'timestamp_created': datetime.datetime.utcnow(),
+            'timestamp_updated': datetime.datetime.utcnow(),
             'facts': {},
         }
 
@@ -81,7 +88,9 @@ def fact(slug, fact, value):
         if slug not in data['objects']:
             raise click.ClickException(
                 "Object {} not found in database".format(slug))
-        data['objects'][slug]['facts'][fact] = value
+        obj = data['objects'][slug]
+        obj['timestamp_updated'] = datetime.datetime.utcnow()
+        obj['facts'][fact] = value
 
 
 if __name__ == '__main__':
