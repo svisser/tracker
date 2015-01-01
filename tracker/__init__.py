@@ -16,7 +16,8 @@ import click
 
 @contextlib.contextmanager
 def get_database():
-    with shelve.open(os.path.expanduser("~/.tracker/data"), writeback=True) as data:
+    with shelve.open(os.path.expanduser("~/.tracker/data"),
+                     writeback=True) as data:
         if not data:
             data['version'] = __version__
         if 'objects' not in data:
@@ -64,7 +65,8 @@ def show(slug):
 def add(slug):
     with get_database() as data:
         if slug in data['objects']:
-            raise click.ClickException("Object {} already in database".format(slug))
+            raise click.ClickException(
+                "Object {} already in database".format(slug))
         data['objects'][slug] = {
             'facts': {},
         }
