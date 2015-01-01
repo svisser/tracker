@@ -56,7 +56,7 @@ def show(slug):
         click.echo("Object {}".format(slug))
         if objects[slug]['facts']:
             click.echo("Facts:")
-            for key, value in sorted(objects[slug]['facts']):
+            for key, value in sorted(objects[slug]['facts'].items()):
                 click.echo('- ' + key + ': ' + value)
 
 
