@@ -31,10 +31,12 @@ def main():
     except FileExistsError:
         pass
     with shelve.open(get_database()) as data:
-        if 'version' not in data:
+        if not data:
             data['version'] = __version__
         if 'objects' not in data:
             data['objects'] = {}
+        if 'version' not in data:
+            raise click.ClickException("Unknown version for database")
         objects = data['objects']
         click.echo("Count: {}".format(len(objects)))
 
