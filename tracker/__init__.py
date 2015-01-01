@@ -53,7 +53,10 @@ def show(slug):
             click.echo("Object {} could not be found".format(slug))
             return
         click.echo("Object {}".format(slug))
-        click.echo(objects[slug])
+        if objects[slug]['facts']:
+            click.echo("Facts:")
+            for key, value in sorted(objects[slug]['facts']):
+                click.echo('- ' + key + ': ' + value)
 
 
 @tracker.command()
