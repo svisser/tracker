@@ -16,7 +16,7 @@ import click
 
 @contextlib.contextmanager
 def get_database():
-    with shelve.open(os.path.expanduser("~/.tracker/data")) as data:
+    with shelve.open(os.path.expanduser("~/.tracker/data"), writeback=True) as data:
         if not data:
             data['version'] = __version__
         if 'objects' not in data:
