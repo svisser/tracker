@@ -13,6 +13,10 @@ import shelve
 import click
 
 
+def get_database():
+    return os.path.expanduser("~/.tracker/data")
+
+
 @click.group(invoke_without_command=True)
 @click.pass_context
 def tracker(ctx):
@@ -26,9 +30,13 @@ def main():
         os.makedirs(os.path.expanduser("~/.tracker/"))
     except FileExistsError:
         pass
-    with shelve.open(os.path.expanduser("~/.tracker/data")) as d:
-        for item in d.items():
-            click.echo(item)
+    with shelve.open(get_database()) as d:
+        if 'version' not in d:
+            d['version'] = __version__
+        if 'objects' not in d:
+            d['objects'] = {}
+        objects = d['objects']
+        click.echo("Count: {}".format(len(objects)))
 
 
 @tracker.command()
