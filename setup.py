@@ -9,5 +9,8 @@ setup(
     author='Simeon Visser',
     author_email='simeonvisser@gmail.com',
     license='MIT',
+    install_requires=[
+        'click==3.3',
+    ],
     packages=['tracker'],
 )
