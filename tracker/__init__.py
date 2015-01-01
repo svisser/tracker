@@ -72,9 +72,10 @@ def add(slug):
         if slug in data['objects']:
             raise click.ClickException(
                 "Object {} already in database".format(slug))
+        utcnow = datetime.datetime.utcnow()
         data['objects'][slug] = {
-            'timestamp_created': datetime.datetime.utcnow(),
-            'timestamp_updated': datetime.datetime.utcnow(),
+            'timestamp_created': utcnow,
+            'timestamp_updated': utcnow,
             'facts': {},
         }
 
