@@ -54,8 +54,11 @@ def show(slug):
         if slug not in objects:
             click.echo("Object {} could not be found".format(slug))
             return
-        click.echo("Object {} - Created: {} - Updated: {}".format(
-            slug,
+        display_name = slug
+        if objects[slug]['facts'].get('name'):
+            display_name = objects[slug]['facts']['name']
+        click.echo("{} - Created: {} - Updated: {}".format(
+            display_name,
             objects[slug]['timestamp_created'].strftime("%B %d, %Y"),
             objects[slug]['timestamp_updated'].strftime("%B %d, %Y"),
         ))
