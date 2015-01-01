@@ -35,7 +35,7 @@ def tracker(ctx):
         main()
 
 
-@tracker.command()
+@tracker.command(help="Display overview of all objects")
 def main():
     try:
         os.makedirs(os.path.expanduser("~/.tracker/"))
@@ -46,7 +46,7 @@ def main():
         click.echo("Count: {}".format(len(objects)))
 
 
-@tracker.command()
+@tracker.command(help="Display details of an object")
 @click.argument('slug')
 def show(slug):
     skipped_facts = set(('name',))
@@ -71,7 +71,7 @@ def show(slug):
                 click.echo('- ' + key + ': ' + value)
 
 
-@tracker.command()
+@tracker.command(help="Add an object to the database")
 @click.argument('slug')
 def add(slug):
     with get_database() as data:
