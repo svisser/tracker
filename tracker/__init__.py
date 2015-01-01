@@ -7,14 +7,23 @@ __email__ = 'simeonvisser@gmail.com'
 __license__ = 'MIT'
 __copyright__ = 'Copyright 2015 Simeon Visser'
 
+import contextlib
 import os
 import shelve
 
 import click
 
 
+@contextlib.contextmanager
 def get_database():
-    return os.path.expanduser("~/.tracker/data")
+    with shelve.open(os.path.expanduser("~/.tracker/data")) as data:
+        if not data:
+            data['version'] = __version__
+        if 'objects' not in data:
+            data['objects'] = {}
+        if 'version' not in data:
+            raise click.ClickException("Unknown version for database")
+        yield data
 
 
 @click.group(invoke_without_command=True)
@@ -30,13 +39,7 @@ def main():
         os.makedirs(os.path.expanduser("~/.tracker/"))
     except FileExistsError:
         pass
-    with shelve.open(get_database()) as data:
-        if not data:
-            data['version'] = __version__
-        if 'objects' not in data:
-            data['objects'] = {}
-        if 'version' not in data:
-            raise click.ClickException("Unknown version for database")
+    with get_database() as data:
         objects = data['objects']
         click.echo("Count: {}".format(len(objects)))
 
@@ -44,7 +47,7 @@ def main():
 @tracker.command()
 @click.argument('slug')
 def show(slug):
-    with shelve.open(get_database()) as data:
+    with get_database() as data:
         objects = data['objects']
         if slug not in objects:
             click.echo("Object {} could not be found".format(slug))
