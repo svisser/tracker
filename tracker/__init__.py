@@ -56,5 +56,16 @@ def show(slug):
         click.echo(objects[slug])
 
 
+@tracker.command()
+@click.argument('slug')
+def add(slug):
+    with get_database() as data:
+        if slug in data['objects']:
+            raise click.ClickException("Object {} already in database".format(slug))
+        data['objects'][slug] = {
+            'facts': {},
+        }
+
+
 if __name__ == '__main__':
     tracker()
