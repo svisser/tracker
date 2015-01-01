@@ -30,20 +30,20 @@ def main():
         os.makedirs(os.path.expanduser("~/.tracker/"))
     except FileExistsError:
         pass
-    with shelve.open(get_database()) as d:
-        if 'version' not in d:
-            d['version'] = __version__
-        if 'objects' not in d:
-            d['objects'] = {}
-        objects = d['objects']
+    with shelve.open(get_database()) as data:
+        if 'version' not in data:
+            data['version'] = __version__
+        if 'objects' not in data:
+            data['objects'] = {}
+        objects = data['objects']
         click.echo("Count: {}".format(len(objects)))
 
 
 @tracker.command()
 @click.argument('slug')
 def show(slug):
-    with shelve.open(get_database()) as d:
-        objects = d['objects']
+    with shelve.open(get_database()) as data:
+        objects = data['objects']
         if slug not in objects:
             click.echo("Object {} could not be found".format(slug))
             return
