@@ -114,10 +114,15 @@ def fact(slug, fact, value):
         utcnow = datetime.datetime.utcnow()
         obj = data['objects'][slug]
         obj['timestamp_updated'] = utcnow
-        obj['facts'][fact] = {
-            'timestamp_updated': utcnow,
-            'value': value,
-        }
+        if fact not in obj['facts']:
+            obj['facts'][fact] = {
+                'timestamp_created': utcnow,
+                'timestamp_updated': utcnow,
+                'value': value,
+            }
+        else:
+            obj['facts'][fact]['timestamp_updated'] = utcnow
+            obj['facts'][fact]['value'] = value
 
 
 if __name__ == '__main__':
