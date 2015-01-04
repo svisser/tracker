@@ -68,7 +68,10 @@ def show(slug):
             for key, value in sorted(objects[slug]['facts'].items()):
                 if key in skipped_facts:
                     continue
-                click.echo('- ' + key + ': ' + value)
+                click.echo('- ({}) - {}: {}'.format(
+                    value['timestamp_updated'].strftime("%B %d, %Y"),
+                    key,
+                    value['value']))
 
 
 @tracker.command(help="Add an object to the database")
@@ -108,9 +111,13 @@ def fact(slug, fact, value):
         if slug not in data['objects']:
             raise click.ClickException(
                 "Object {} not found in database".format(slug))
+        utcnow = datetime.datetime.utcnow()
         obj = data['objects'][slug]
-        obj['timestamp_updated'] = datetime.datetime.utcnow()
-        obj['facts'][fact] = value
+        obj['timestamp_updated'] = utcnow
+        obj['facts'][fact] = {
+            'timestamp_updated': utcnow,
+            'value': value,
+        }
 
 
 if __name__ == '__main__':
